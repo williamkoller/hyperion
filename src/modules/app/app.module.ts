@@ -1,8 +1,9 @@
 import envFolderPath, { environments } from '@/config/environments';
 import { configService } from '@/infra/typeorm/config/config.service';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from '@/modules/users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -11,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       load: [environments],
     }),
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    forwardRef(() => UsersModule),
   ],
   controllers: [],
   providers: [],
