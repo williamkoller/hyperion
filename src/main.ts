@@ -5,6 +5,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor, TimeoutInterceptor } from './common/interceptors';
+import { swagger } from './docs/swagger';
 
 async function bootstrap() {
   const logger = new Logger('Main');
@@ -13,6 +14,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new TimeoutInterceptor(), new LoggingInterceptor());
+
+  swagger(app);
 
   const config = app.get<ConfigService>(ConfigService);
   const port = config.get<string>('port');
