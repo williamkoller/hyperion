@@ -15,6 +15,8 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new TimeoutInterceptor(), new LoggingInterceptor());
 
+  app.setGlobalPrefix('api');
+
   swagger(app);
 
   const config = app.get<ConfigService>(ConfigService);
