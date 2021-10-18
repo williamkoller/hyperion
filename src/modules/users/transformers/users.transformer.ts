@@ -8,6 +8,7 @@ export const usersTransformer = (users: UserEntity[]): UserOutputType[] => {
     name: user.name,
     surname: user.surname,
     email: user.email,
+    password: user.password,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   }));
@@ -19,6 +20,7 @@ export const userTransformer = (user: UserEntity): UserOutputType => {
     name: user.name,
     surname: user.surname,
     email: user.email,
+    password: user.password,
     createdAt: validatorDate(user.createdAt),
     updatedAt: validatorDate(user.updatedAt),
   };
