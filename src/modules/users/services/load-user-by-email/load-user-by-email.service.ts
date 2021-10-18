@@ -1,8 +1,8 @@
 import { UserEntity } from '@/infra/typeorm/entities/user-entity/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersRepository } from '@/modules/users/repositories/users.repository';
-import { userTransformer } from '../../transformers/users.transformer';
-import { UserOutputType } from '../../types/user-output/user-output.type';
+import { userTransformer } from '@/modules/users/transformers/users.transformer';
+import { UserOutputType } from '@/modules/users/types/user-output/user-output.type';
 
 @Injectable()
 export class LoadUserByEmailService {
