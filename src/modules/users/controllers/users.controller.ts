@@ -1,13 +1,14 @@
-import { ValidationParamsPipe } from '@/common/pipes/validation-params.pipe';
 import { UserEntity } from '@/infra/typeorm/entities/user-entity/user.entity';
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
 import {
   Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
-  Param,
   Post,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AddUserDto } from '../dtos/add-user/add-user.dto';
@@ -38,18 +39,19 @@ export class UsersController {
     return await this.addUserService.addUser(addUserDto);
   }
 
-  @Get('load-user-by-email/:email')
-  @HttpCode(HttpStatus.CREATED)
+  @Get('load-user-by-email')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
   @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: 'add new user.',
+    status: HttpStatus.OK,
+    description: 'load user by e-mail.',
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
     description: 'e-mail past request is already in use',
   })
   public async loadByEmail(
-    @Param(ValidationParamsPipe) userInput: UserInput,
+    @Query() userInput: UserInput,
   ): Promise<UserOutputType> {
     return await this.loadUserByEmailService.loadEmailIsNotFound(
       userInput.email,

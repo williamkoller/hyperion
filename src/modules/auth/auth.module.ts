@@ -10,6 +10,7 @@ import { UsersRepository } from '@/modules/users/repositories/users.repository';
 import { LoadUserByEmailService } from '@/modules/users/services/load-user-by-email/load-user-by-email.service';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
   imports: [
@@ -27,14 +28,20 @@ import { AuthService } from './services/auth.service';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('secret'),
+        secret: configService.get<string>('secret'),
         signOptions: {
           expiresIn: configService.get('expiresIn'),
         },
       }),
     }),
   ],
-  providers: [AuthService, BcryptAdapter, JwtAdapter, LoadUserByEmailService],
+  providers: [
+    AuthService,
+    BcryptAdapter,
+    JwtAdapter,
+    LoadUserByEmailService,
+    JwtStrategy,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}
