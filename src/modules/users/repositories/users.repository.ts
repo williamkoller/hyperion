@@ -25,6 +25,7 @@ export class UsersRepository
       .where('(users.email = :email)', { email })
       .getOne();
   }
+
   public async loadById(id: number): Promise<UserEntity> {
     return await this.findOne(id);
   }

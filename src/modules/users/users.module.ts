@@ -8,6 +8,7 @@ import { UsersController } from './controllers/users.controller';
 import { UsersRepository } from './repositories/users.repository';
 import { AddUserService } from './services/add-user/add-user.service';
 import { LoadUserByEmailService } from './services/load-user-by-email/load-user-by-email.service';
+import { LoadUserByIdService } from './services/load-user-by-id/load-user-by-id.service';
 
 @Module({
   imports: [
@@ -22,7 +23,12 @@ import { LoadUserByEmailService } from './services/load-user-by-email/load-user-
       }),
     }),
   ],
-  providers: [AddUserService, LoadUserByEmailService, BcryptAdapter],
+  providers: [
+    AddUserService,
+    LoadUserByEmailService,
+    BcryptAdapter,
+    LoadUserByIdService,
+  ],
   controllers: [UsersController],
 })
 export class UsersModule {}
