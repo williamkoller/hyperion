@@ -1,12 +1,13 @@
 import { UserEntity } from '@/infra/typeorm/entities/user-entity/user.entity';
 import { UsersRepository } from '@/modules/users/repositories/users.repository';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthPayloadType } from '@/modules/auth/types/auth-payload/auth-payload.type';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private logger = new Logger(JwtStrategy.name);
   constructor(private readonly usersRepo: UsersRepository) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -16,9 +17,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(authPayloadType: AuthPayloadType): Promise<UserEntity> {
+    this.logger.log(`JwtStrategy => ${JSON.stringify(authPayloadType)}`);
     const user = await this.usersRepo.loadById(authPayloadType.id);
-    if (!user) {
-      throw new UnauthorizedException('Unauthorized user.');
+
+    const validUser = async (): Promise<boolean> =>
+      user.id == authPayloadType.id;
+
+    if (!user && validUser()) {
+      throw new UnauthorizedException();
     }
     return user;
   }
