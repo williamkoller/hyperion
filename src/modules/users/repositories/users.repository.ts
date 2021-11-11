@@ -2,6 +2,7 @@ import {
   AddUserRepository,
   LoadUserByEmailRepository,
   LoadUserByIdRepository,
+  DeleteUserByIdRepository,
 } from '@/data/protocols/db/user';
 import { UserEntity } from '@/infra/typeorm/entities/user-entity/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
@@ -13,7 +14,8 @@ export class UsersRepository
   implements
     AddUserRepository,
     LoadUserByEmailRepository,
-    LoadUserByIdRepository
+    LoadUserByIdRepository,
+    DeleteUserByIdRepository
 {
   public async add(addUserDto: AddUserDto): Promise<UserEntity> {
     const userCreated = Object.assign({} as AddUserDto, addUserDto);
@@ -28,5 +30,9 @@ export class UsersRepository
 
   public async loadById(id: number): Promise<UserEntity> {
     return await this.findOne(id);
+  }
+
+  public async deleteUser(id: number): Promise<void> {
+    await this.delete(id);
   }
 }
