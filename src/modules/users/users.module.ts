@@ -9,6 +9,7 @@ import { UsersRepository } from './repositories/users.repository';
 import { AddUserService } from './services/add-user/add-user.service';
 import { LoadUserByEmailService } from './services/load-user-by-email/load-user-by-email.service';
 import { LoadUserByIdService } from './services/load-user-by-id/load-user-by-id.service';
+import { LoadUserByNameService } from './services/load-user-by-name/load-user-by-name.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { LoadUserByIdService } from './services/load-user-by-id/load-user-by-id.
     LoadUserByEmailService,
     BcryptAdapter,
     LoadUserByIdService,
+    LoadUserByNameService,
   ],
   controllers: [UsersController],
 })

@@ -3,6 +3,7 @@ import {
   LoadUserByEmailRepository,
   LoadUserByIdRepository,
   DeleteUserByIdRepository,
+  LoadUserByNameRepository,
 } from '@/data/protocols/db/user';
 import { UserEntity } from '@/infra/typeorm/entities/user-entity/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
@@ -15,7 +16,8 @@ export class UsersRepository
     AddUserRepository,
     LoadUserByEmailRepository,
     LoadUserByIdRepository,
-    DeleteUserByIdRepository
+    DeleteUserByIdRepository,
+    LoadUserByNameRepository
 {
   public async add(addUserDto: AddUserDto): Promise<UserEntity> {
     const userCreated = Object.assign({} as AddUserDto, addUserDto);
@@ -25,6 +27,12 @@ export class UsersRepository
   public async loadByEmail(email: string): Promise<UserEntity> {
     return await this.createQueryBuilder('users')
       .where('(users.email = :email)', { email })
+      .getOne();
+  }
+
+  public async loadUserByName(name: string): Promise<UserEntity> {
+    return await this.createQueryBuilder('users')
+      .where('(users.name ILIKE :name)', { name: `%${name}%` })
       .getOne();
   }
 

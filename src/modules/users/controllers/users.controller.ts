@@ -17,6 +17,7 @@ import { AddUserDto } from '../dtos/add-user/add-user.dto';
 import { AddUserService } from '../services/add-user/add-user.service';
 import { LoadUserByEmailService } from '../services/load-user-by-email/load-user-by-email.service';
 import { LoadUserByIdService } from '../services/load-user-by-id/load-user-by-id.service';
+import { LoadUserByNameService } from '../services/load-user-by-name/load-user-by-name.service';
 import { UserInput } from '../types/user-input/user-input.type';
 import { UserOutputType } from '../types/user-output/user-output.type';
 
@@ -27,6 +28,7 @@ export class UsersController {
     private readonly addUserService: AddUserService,
     private readonly loadUserByEmailService: LoadUserByEmailService,
     private readonly loadUserByIdService: LoadUserByIdService,
+    private readonly loadUserByNameService: LoadUserByNameService,
   ) {}
 
   @Post()
@@ -60,6 +62,23 @@ export class UsersController {
     return await this.loadUserByEmailService.loadEmailIsNotFound(
       userInput.email,
     );
+  }
+
+  @Get('load-user-by-name/:name')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'load user by name.',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'name past request is already in use',
+  })
+  public async loadByName(
+    @Param(ValidationParamsPipe) userInput: UserInput,
+  ): Promise<UserEntity> {
+    return await this.loadUserByNameService.loadUserByName(userInput.name);
   }
 
   @Get('load-user-by-id/:id')
