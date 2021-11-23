@@ -12,10 +12,11 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { LastLogged } from '@/utils/last-logged/last-logged';
+import { LogsRepository } from '../logs/repositories/logs.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, UsersRepository]),
+    TypeOrmModule.forFeature([UserEntity, UsersRepository, LogsRepository]),
     PassportModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

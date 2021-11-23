@@ -4,11 +4,16 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthPayloadType } from '@/modules/auth/types/auth-payload/auth-payload.type';
+import { LogsRepository } from '@/modules/logs/repositories/logs.repository';
+import { Payload } from '@/modules/logs/interfaces/payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   private logger = new Logger(JwtStrategy.name);
-  constructor(private readonly usersRepo: UsersRepository) {
+  constructor(
+    private readonly usersRepo: UsersRepository,
+    private readonly logsRepo: LogsRepository,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -26,6 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user && validUser()) {
       throw new UnauthorizedException();
     }
+    await this.logsRepo.addLog<Payload<UserEntity>>({ payload: user });
     return user;
   }
 }
