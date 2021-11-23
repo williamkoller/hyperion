@@ -4,10 +4,13 @@ import {
   LoadUserByIdRepository,
   DeleteUserByIdRepository,
   LoadUserByNameRepository,
+  UpdateUserRepository,
+  LastLoggedRepository,
 } from '@/data/protocols/db/user';
 import { UserEntity } from '@/infra/typeorm/entities/user-entity/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { AddUserDto } from '@/modules/users/dtos/add-user/add-user.dto';
+import { UpdateUserDto } from '../dtos/update-user/update-user.dto';
 
 @EntityRepository(UserEntity)
 export class UsersRepository
@@ -17,7 +20,9 @@ export class UsersRepository
     LoadUserByEmailRepository,
     LoadUserByIdRepository,
     DeleteUserByIdRepository,
-    LoadUserByNameRepository
+    LoadUserByNameRepository,
+    UpdateUserRepository,
+    LastLoggedRepository
 {
   public async add(addUserDto: AddUserDto): Promise<UserEntity> {
     const userCreated = Object.assign({} as AddUserDto, addUserDto);
@@ -42,5 +47,20 @@ export class UsersRepository
 
   public async deleteUser(id: number): Promise<void> {
     await this.delete(id);
+  }
+
+  public async updateUser(
+    user: UserEntity,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const userUpdated = this.merge(user, { ...updateUserDto });
+    return await this.save(userUpdated);
+  }
+
+  public async lastLogged(id: number, lastLogged: Date): Promise<void> {
+    return await this.query(
+      `UPDATE "users" SET "last_logged" = $2 WHERE id = $1`,
+      [id, lastLogged],
+    );
   }
 }

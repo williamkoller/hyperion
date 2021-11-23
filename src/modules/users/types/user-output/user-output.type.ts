@@ -4,6 +4,7 @@ export type UserOutputType = {
   surname: string;
   password: string;
   email: string;
+  lastLogged?: Date | string;
   createdAt: Date | string;
   updatedAt: Date | string;
 };

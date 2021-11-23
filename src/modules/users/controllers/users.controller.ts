@@ -39,7 +39,7 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'e-mail past request is already in use',
+    description: 'e-mail past request is already in use.',
   })
   public async add(@Body() addUserDto: AddUserDto): Promise<UserEntity> {
     return await this.addUserService.addUser(addUserDto);
@@ -54,7 +54,7 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'e-mail past request is already in use',
+    description: 'e-mail past request is already in use.',
   })
   public async loadByEmail(
     @Query(ValidationParamsPipe) userInput: UserInput,
@@ -73,11 +73,11 @@ export class UsersController {
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'name past request is already in use',
+    description: 'name past request is already in use.',
   })
   public async loadByName(
     @Param(ValidationParamsPipe) userInput: UserInput,
-  ): Promise<UserEntity> {
+  ): Promise<UserOutputType> {
     return await this.loadUserByNameService.loadUserByName(userInput.name);
   }
 
@@ -86,11 +86,11 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'load user by e-mail.',
+    description: 'load user by id.',
   })
   @ApiResponse({
-    status: HttpStatus.CONFLICT,
-    description: 'e-mail past request is already in use',
+    status: HttpStatus.NOT_FOUND,
+    description: 'user not found.',
   })
   public async loadById(
     @Param(ValidationParamsPipe) userInput: UserInput,

@@ -11,6 +11,7 @@ import { LoadUserByEmailService } from '@/modules/users/services/load-user-by-em
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { LastLogged } from '@/utils/last-logged/last-logged';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     JwtAdapter,
     LoadUserByEmailService,
     JwtStrategy,
+    LastLogged,
   ],
   controllers: [AuthController],
 })
