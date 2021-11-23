@@ -5,7 +5,7 @@ import { BaseEntity } from '../base-entity/base-entity';
 @Entity('logs')
 export class LogEntity extends BaseEntity {
   @Column({ type: 'json', nullable: false })
-  payload: Payload<any>;
+  payload: Payload<string>;
 
   constructor(partial: Partial<LogEntity>) {
     super();
